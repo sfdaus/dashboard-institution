@@ -24,6 +24,8 @@ type InstitutionRepository interface {
 	Create(ctx context.Context, institution *Institution) error
 	Update(ctx context.Context, institution *Institution) error
 	Delete(ctx context.Context, institution *Institution) (int64, error)
+	GetList(ctx context.Context, request *request.GetListInstitutionReq) ([]response.GetListInstitutionRes, response.MetaRes, error)
+	GetDetail(ctx context.Context, request *request.GetDetailInstitutionReq) (Institution, error)
 }
 
 // InstitutionUsecase represent the institution usecase contract
@@ -31,4 +33,6 @@ type InstitutionUsecase interface {
 	Create(ctx context.Context, request *request.CreateInstitutionReq) (response.CreateInstitutionRes, error)
 	Update(ctx context.Context, request *request.UpdateInstitutionReq) error
 	Delete(ctx context.Context, request *request.DeleteInstitutionReq) (int64, error)
+	GetList(ctx context.Context, request *request.GetListInstitutionReq) ([]response.GetListInstitutionRes, response.MetaRes, error)
+	GetDetail(ctx context.Context, request *request.GetDetailInstitutionReq) (Institution, error)
 }

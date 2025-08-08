@@ -81,6 +81,7 @@ func (u *InstitutionUsecase) Update(c context.Context, request *request.UpdateIn
 	err = u.institutionRepo.Update(ctx, institutionPayload)
 	return
 }
+
 func (u *InstitutionUsecase) Delete(c context.Context, request *request.DeleteInstitutionReq) (rowsAffected int64, err error) {
 	ctx, cancel := context.WithTimeout(c, u.ctxTimeout)
 	defer cancel()
@@ -90,5 +91,21 @@ func (u *InstitutionUsecase) Delete(c context.Context, request *request.DeleteIn
 	}
 
 	rowsAffected, err = u.institutionRepo.Delete(ctx, threadPayload)
+	return
+}
+
+func (u *InstitutionUsecase) GetList(c context.Context, request *request.GetListInstitutionReq) (res []response.GetListInstitutionRes, meta response.MetaRes, err error) {
+	ctx, cancel := context.WithTimeout(c, u.ctxTimeout)
+	defer cancel()
+
+	res, meta, err = u.institutionRepo.GetList(ctx, request)
+	return
+}
+
+func (u *InstitutionUsecase) GetDetail(c context.Context, request *request.GetDetailInstitutionReq) (res domain.Institution, err error) {
+	ctx, cancel := context.WithTimeout(c, u.ctxTimeout)
+	defer cancel()
+
+	res, err = u.institutionRepo.GetDetail(ctx, request)
 	return
 }

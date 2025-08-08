@@ -25,6 +25,8 @@ func NewInstitutionHandler(e *echo.Echo, middleware *middleware.Middleware, inst
 	apiV1.POST("/institutions", handler.Create)
 	apiV1.PATCH("/institutions/:id", handler.Update)
 	apiV1.DELETE("/institutions/:id", handler.Delete)
+	apiV1.GET("/institutions", handler.GetList)
+	apiV1.GET("/institutions/:id", handler.GetDetail)
 }
 
 func (h *InstitutionHandler) Create(c echo.Context) error {
@@ -92,6 +94,57 @@ func (h *InstitutionHandler) Delete(c echo.Context) error {
 			"message": "Institution successfully deleted",
 			"data": map[string]int64{
 				"rows_affected": rowsAffected,
+			},
+		})
+	}
+}
+
+func (h *InstitutionHandler) GetList(c echo.Context) error {
+	ctx := c.Request().Context()
+	var req request.GetListInstitutionReq
+
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusUnprocessableEntity, utils.NewUnprocessableEntityError(err.Error()))
+	}
+
+	if err := req.Validate(); err != nil {
+		errVal := err.(validation.Errors)
+		return c.JSON(http.StatusBadRequest, utils.NewInvalidInputError(errVal))
+	}
+
+	if res, meta, err := h.InstitutionUC.GetList(ctx, &req); err != nil {
+		return c.JSON(utils.ParseHttpError(err))
+	} else {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "Institution successfully retrieved",
+			"data": map[string]interface{}{
+				"data": res,
+				"meta": meta,
+			},
+		})
+	}
+}
+
+func (h *InstitutionHandler) GetDetail(c echo.Context) error {
+	ctx := c.Request().Context()
+	var req request.GetDetailInstitutionReq
+
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusUnprocessableEntity, utils.NewUnprocessableEntityError(err.Error()))
+	}
+
+	if err := req.Validate(); err != nil {
+		errVal := err.(validation.Errors)
+		return c.JSON(http.StatusBadRequest, utils.NewInvalidInputError(errVal))
+	}
+
+	if res, err := h.InstitutionUC.GetDetail(ctx, &req); err != nil {
+		return c.JSON(utils.ParseHttpError(err))
+	} else {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "Institution successfully retrieved",
+			"data": map[string]interface{}{
+				"data": res,
 			},
 		})
 	}
