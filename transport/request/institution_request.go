@@ -6,9 +6,10 @@ import (
 
 // CreateInstitutionReq represent create request body
 type CreateInstitutionReq struct {
-	Name  string `json:"name"`
-	Alias string `json:"alias"`
-	Type  string `json:"type"`
+	Name   string `json:"name"`
+	Alias  string `json:"alias"`
+	Type   string `json:"type"`
+	UserID string
 }
 
 func (request CreateInstitutionReq) Validate() error {
@@ -16,6 +17,7 @@ func (request CreateInstitutionReq) Validate() error {
 		&request,
 		validation.Field(&request.Name, validation.Required),
 		validation.Field(&request.Alias, validation.Required),
+		validation.Field(&request.UserID, validation.Required),
 	)
 }
 
@@ -26,24 +28,28 @@ type UpdateInstitutionReq struct {
 	Alias    string `json:"alias"`
 	Type     string `json:"type"`
 	IsActive *bool  `json:"is_active"`
+	UserID   string
 }
 
 func (request UpdateInstitutionReq) Validate() error {
 	return validation.ValidateStruct(
 		&request,
 		validation.Field(&request.ID, validation.Required),
+		validation.Field(&request.UserID, validation.Required),
 	)
 }
 
 // Delete request body
 type DeleteInstitutionReq struct {
-	ID string `param:"id"`
+	ID     string `param:"id"`
+	UserID string
 }
 
 func (request DeleteInstitutionReq) Validate() error {
 	return validation.ValidateStruct(
 		&request,
 		validation.Field(&request.ID, validation.Required),
+		validation.Field(&request.UserID, validation.Required),
 	)
 }
 

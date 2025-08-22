@@ -40,7 +40,7 @@ func (u *InstitutionUsecase) Create(c context.Context, request *request.CreateIn
 		Alias:     request.Alias,
 		Type:      request.Type,
 		IsActive:  &t,
-		CreatedBy: "TODO_created_by",
+		CreatedBy: request.UserID,
 		CreatedAt: time.Now().Unix(),
 	}
 
@@ -58,7 +58,7 @@ func (u *InstitutionUsecase) Update(c context.Context, request *request.UpdateIn
 	// Update Payload
 	institutionPayload := &domain.Institution{
 		ID:        request.ID,
-		UpdatedBy: "TODO_updated_by",
+		UpdatedBy: request.UserID,
 		UpdatedAt: time.Now().Unix(),
 	}
 
